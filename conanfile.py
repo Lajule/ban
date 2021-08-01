@@ -4,11 +4,10 @@ from conans import ConanFile, CMake
 class BanConan(ConanFile):
     name = "ban"
     version = "0.1"
-    license = "<Put the package license here>"
-    author = "<Put your name here> <And your email here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Ban here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    author = "julien ROUZIERES julien.rouzieres@mac.com"
+    url = "https://github.com/Lajule/ban"
+    description = " Add startup banners into your C applications "
+    topics = ("C")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
