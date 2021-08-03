@@ -6,4 +6,4 @@
   #define ban_EXPORT
 #endif
 
-ban_EXPORT void ban();
+ban_EXPORT void ban(const char *);
