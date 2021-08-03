@@ -1,5 +1,5 @@
 #include "ban.h"
 
-int main() {
-    ban();
+int main(int argc, char **argv) {
+    ban(argv[0]);
 }
