@@ -9,5 +9,8 @@
 #define ban_EXPORT
 #endif
 
-ban_EXPORT void ban(const char *, char *, size_t);
+#define DEFAULT_TPL "@NAME@ - @HOSTNAME@ - @OS@ - @CORES@ - @MEM@ - @TIME@"
+
+#define ban(n, s, l) bant(n, DEFAULT_TPL, s, l)
+
 ban_EXPORT void bant(const char *, const char *, char *, size_t);

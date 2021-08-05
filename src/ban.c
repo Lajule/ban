@@ -13,9 +13,6 @@
 
 #include "ban.h"
 
-#define DEFAULT_TPL "Name: @NAME@\nHostname: @HOSTNAME@\nOS: @OS@\nCores:\
- @CORES@\nMemory: @MEM@\nTime: @TIME@"
-
 #ifdef _WIN32
 #define OS "Windows 32-bit"
 #elif _WIN64
@@ -42,11 +39,6 @@ static void get_mem(struct mem_s *);
 static void get_time(char *, size_t);
 static void humanize_mem(uint64_t, char *, size_t);
 static char *render(const char *, const char *, const char *);
-
-void
-ban(const char *name, char *banner, size_t length) {
-	bant(name, DEFAULT_TPL, banner, length);
-}
 
 void
 bant(const char *name, const char *tpl, char *banner, size_t length) {
