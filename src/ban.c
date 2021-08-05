@@ -32,8 +32,7 @@
 #define OS "Other"
 #endif
 
-struct mem_s
-{
+struct mem_s {
 	uint64_t available, total;
 };
 
@@ -45,14 +44,12 @@ static void humanize_mem(uint64_t, char *, size_t);
 static char *render(const char *, const char *, const char *);
 
 void
-ban(const char *name, char *banner, size_t length)
-{
+ban(const char *name, char *banner, size_t length) {
 	bant(name, DEFAULT_TPL, banner, length);
 }
 
 void
-bant(const char *name, const char *tpl, char *banner, size_t length)
-{
+bant(const char *name, const char *tpl, char *banner, size_t length) {
 	char *result = render(tpl, "@NAME@", name);
 
 	char *tmp = result;
@@ -109,8 +106,7 @@ bant(const char *name, const char *tpl, char *banner, size_t length)
 }
 
 static void
-get_hostname(char *hostname, size_t length)
-{
+get_hostname(char *hostname, size_t length) {
 #ifdef WIN32
 	DWORD size = length;
 	GetComputerName(hostname, &size);
@@ -120,8 +116,7 @@ get_hostname(char *hostname, size_t length)
 }
 
 static void
-get_cores(int32_t *cores)
-{
+get_cores(int32_t *cores) {
 #ifdef WIN32
 	SYSTEM_INFO info = {.dwNumberOfProcessors=0};
 	GetSystemInfo(&info);
@@ -132,8 +127,7 @@ get_cores(int32_t *cores)
 }
 
 static void
-get_mem(struct mem_s *mem)
-{
+get_mem(struct mem_s *mem) {
 #ifdef WIN32
 	MEMORYSTATUS status = {.dwTotalPhys=0, .dwAvailPhys=0};
 	GlobalMemoryStatus(&status);
@@ -148,8 +142,7 @@ get_mem(struct mem_s *mem)
 }
 
 static void
-get_time(char *now, size_t length)
-{
+get_time(char *now, size_t length) {
   	time_t rawtime;
 	time(&rawtime);
 
@@ -160,15 +153,12 @@ get_time(char *now, size_t length)
 }
 
 static void
-humanize_mem(uint64_t bytes, char *mem, size_t length)
-{
+humanize_mem(uint64_t bytes, char *mem, size_t length) {
 	int32_t i = 0;
 	double d = bytes;
 
-	if (d > 1024.0)
-	{
-		for (; bytes / 1024 > 0 && i < 4; ++i, bytes /= 1024)
-		{
+	if (d > 1024.0) {
+		for (; bytes / 1024 > 0 && i < 4; ++i, bytes /= 1024) {
 			d = bytes / 1024.0;
 		}
 	}
@@ -178,16 +168,13 @@ humanize_mem(uint64_t bytes, char *mem, size_t length)
 }
 
 static char *
-render(const char *tpl, const char *p, const char *v)
-{
+render(const char *tpl, const char *p, const char *v) {
 	int32_t idx, cnt = 0;
 	size_t plen = strlen(p);
 	size_t vlen = strlen(v);
 
-	for (; tpl[idx]; ++idx)
-	{
-		if (strstr(tpl + idx, p) == tpl + idx)
-		{
+	for (; tpl[idx]; ++idx) {
+		if (strstr(tpl + idx, p) == tpl + idx) {
 			++cnt;
 			idx += plen - 1;
 		}
@@ -196,16 +183,12 @@ render(const char *tpl, const char *p, const char *v)
 	char *result = (char*)calloc(idx + cnt * (vlen - plen) + 1, sizeof(char));
 
 	idx = 0;
-	while (*tpl)
-	{
-		if (strstr(tpl, p) == tpl)
-		{
+	while (*tpl) {
+		if (strstr(tpl, p) == tpl) {
 			strcpy(result + idx, v);
 			idx += vlen;
 			tpl += plen;
-		}
-		else
-		{
+		} else {
 			result[idx++] = *tpl++;
 		}
 	}

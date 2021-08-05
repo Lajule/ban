@@ -6,7 +6,7 @@ class BanConan(ConanFile):
     version = "0.1"
     author = "julien ROUZIERES julien.rouzieres@mac.com"
     url = "https://github.com/Lajule/ban"
-    description = " Add startup banners into your C applications "
+    description = "Add startup banners into your C applications"
     topics = ("C")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -22,11 +22,6 @@ class BanConan(ConanFile):
         cmake = CMake(self)
         cmake.configure(source_folder="src")
         cmake.build()
-
-        # Explicit way:
-        # self.run('cmake %s/hello %s'
-        #          % (self.source_folder, cmake.command_line))
-        # self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
         self.copy("*.h", dst="include", src="src")
