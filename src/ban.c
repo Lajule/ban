@@ -6,6 +6,7 @@
 #include <unistd.h>
 #endif
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,9 +30,12 @@
 #define OS "Other"
 #endif
 
-struct mem_s {
-	uint64_t available, total;
+struct mem_s
+{
+  uint64_t available, total;
 };
+
+static const char *mem_units[] = {"B", "K", "M", "G", "T"};
 
 static void get_hostname(char *, size_t);
 static void get_cores(int32_t *);
@@ -41,64 +45,66 @@ static void humanize_mem(uint64_t, char *, size_t);
 static char *render(const char *, const char *, const char *);
 
 void
-bant(const char *name, const char *tpl, char *banner, size_t length) {
+bant(const char *name, const char *tpl, char *banner, size_t length)
+{
+	assert(name != NULL);
+	assert(tpl != NULL);
+	assert(banner != NULL);
+
+	/* Render binary name. */
 	char *result = render(tpl, "@NAME@", name);
 
+	/* Render hostname. */
 	char *tmp = result;
-
 	char hostname[128] = {'\0'};
 	get_hostname(hostname, 128);
-
 	result = render(result, "@HOSTNAME@", hostname);
 	free(tmp);
 
+	/* Render operating system. */
 	tmp = result;
-
 	result = render(result, "@OS@", OS);
 	free(tmp);
 
+	/* Render number of cores. */
 	tmp = result;
-
 	int32_t c = 0;
 	get_cores(&c);
-
 	char cores[4] = {'\0'};
 	snprintf(cores, 4, "%d", c);
-
 	result = render(result, "@CORES@", cores);
 	free(tmp);
 
+	/* Render available and total memory. */
 	tmp = result;
-
 	struct mem_s m = {.available=0, .total=0};
 	get_mem(&m);
-
 	char available[32] = {'\0'};
 	humanize_mem(m.available, available, 32);
-
 	char total[32] = {'\0'};
 	humanize_mem(m.total, total, 32);
-
 	char mem[64] = {'\0'};
 	snprintf(mem, 64, "%s/%s", available, total);
-
 	result = render(result, "@MEM@", mem);
 	free(tmp);
 
+	/* Render current time. */
 	tmp = result;
-
 	char now[32] = {'\0'};
 	get_time(now, 32);
-
 	result = render(result, "@TIME@", now);
 	free(tmp);
 
+	/* Dump result in output string. */
 	strncpy(banner, result, length);
 	free(result);
 }
 
 static void
-get_hostname(char *hostname, size_t length) {
+get_hostname(char *hostname, size_t length)
+{
+	assert(hostname != NULL);
+
 #ifdef WIN32
 	DWORD size = length;
 	GetComputerName(hostname, &size);
@@ -108,7 +114,10 @@ get_hostname(char *hostname, size_t length) {
 }
 
 static void
-get_cores(int32_t *cores) {
+get_cores(int32_t *cores)
+{
+	assert(cores != NULL);
+
 #ifdef WIN32
 	SYSTEM_INFO info = {.dwNumberOfProcessors=0};
 	GetSystemInfo(&info);
@@ -119,7 +128,10 @@ get_cores(int32_t *cores) {
 }
 
 static void
-get_mem(struct mem_s *mem) {
+get_mem(struct mem_s *mem)
+{
+	assert(mem != NULL);
+
 #ifdef WIN32
 	MEMORYSTATUS status = {.dwTotalPhys=0, .dwAvailPhys=0};
 	GlobalMemoryStatus(&status);
@@ -134,7 +146,10 @@ get_mem(struct mem_s *mem) {
 }
 
 static void
-get_time(char *now, size_t length) {
+get_time(char *now, size_t length)
+{
+	assert(now != NULL);
+
   	time_t rawtime;
 	time(&rawtime);
 
@@ -145,28 +160,37 @@ get_time(char *now, size_t length) {
 }
 
 static void
-humanize_mem(uint64_t bytes, char *mem, size_t length) {
+humanize_mem(uint64_t bytes, char *mem, size_t length)
+{
+	assert(mem != NULL);
+
 	int32_t i = 0;
 	double d = bytes;
 
-	if (d > 1024.0) {
-		for (; bytes / 1024 > 0 && i < 4; ++i, bytes /= 1024) {
+	if (d > 1024.0)
+	{
+		for (; bytes / 1024 > 0 && i < 4; ++i, bytes /= 1024)
+		{
 			d = bytes / 1024.0;
 		}
 	}
 
-	char *units[] = {"B", "K", "M", "G", "T"};
-	snprintf(mem, length, "%.02lf%s", d, units[i]);
+	snprintf(mem, length, "%.02lf%s", d, mem_units[i]);
 }
 
 static char *
-render(const char *tpl, const char *p, const char *v) {
+render(const char *tpl, const char *p, const char *v)
+{
+	assert(tpl != NULL);
+
 	int32_t idx, cnt = 0;
 	size_t plen = strlen(p);
 	size_t vlen = strlen(v);
 
-	for (; tpl[idx]; ++idx) {
-		if (strstr(tpl + idx, p) == tpl + idx) {
+	for (; tpl[idx]; ++idx)
+	{
+		if (strstr(tpl + idx, p) == tpl + idx)
+		{
 			++cnt;
 			idx += plen - 1;
 		}
@@ -175,12 +199,16 @@ render(const char *tpl, const char *p, const char *v) {
 	char *result = (char*)calloc(idx + cnt * (vlen - plen) + 1, sizeof(char));
 
 	idx = 0;
-	while (*tpl) {
-		if (strstr(tpl, p) == tpl) {
+	while (*tpl)
+	{
+		if (strstr(tpl, p) == tpl)
+		{
 			strcpy(result + idx, v);
 			idx += vlen;
 			tpl += plen;
-		} else {
+		}
+		else
+		{
 			result[idx++] = *tpl++;
 		}
 	}

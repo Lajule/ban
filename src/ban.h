@@ -4,13 +4,13 @@
 #include <stdio.h>
 
 #ifdef WIN32
-#define ban_EXPORT __declspec(dllexport)
+#define BAN_EXPORT __declspec(dllexport)
 #else
-#define ban_EXPORT
+#define BAN_EXPORT
 #endif
 
 #define DEFAULT_TPL "@NAME@ - @HOSTNAME@ - @OS@ - @CORES@ - @MEM@ - @TIME@"
 
-#define ban(n, s, l) bant(n, DEFAULT_TPL, s, l)
+#define BAN(Name, Str, Length) bant(Name, DEFAULT_TPL, Str, Lenght)
 
-ban_EXPORT void bant(const char *, const char *, char *, size_t);
+BAN_EXPORT void bant(const char *, const char *, char *, size_t);
