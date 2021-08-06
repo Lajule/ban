@@ -16,3 +16,10 @@ main(int argc, char **argv) {
 	return 0;
 }
 ```
+
+Compile previous program before running :
+
+```sh
+./example
+./example - Linux - 805.98M/1.94G
+````
