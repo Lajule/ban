@@ -23,3 +23,13 @@ Compile previous program before running :
 ./example
 ./example - Linux - 805.98M/1.94G
 ````
+
+## Template
+
+| Placeholder | Description |
+| ----------- | ----------- |
+| @NAME@ | Binary name |
+| @HOSTNAME@ | Hostname |
+| @OS@ | Operating system name |
+| @MEM@ | Available and total memory |
+| @TIME@ | Current time |
