@@ -9,7 +9,8 @@ Add startup banners into your C applications.
 #include "ban.h"
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv)
+{
 	char banner[256] = {'\0'};
 	bant(argv[0], "@NAME@ - @OS@ - @MEM@", banner, 256);
 	puts(banner);
