@@ -22,4 +22,4 @@ class BanTestConan(ConanFile):
     def test(self):
         if not tools.cross_building(self):
             os.chdir("bin")
-            self.run(".%sexample" % os.sep)
+            self.run(".%sexample '@NAME@ - @OS@ - @MEM@'" % os.sep)

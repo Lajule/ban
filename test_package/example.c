@@ -5,7 +5,7 @@
 int
 main(int argc, char **argv) {
 	char banner[256] = {'\0'};
-	bant(argv[0], "@NAME@ - @OS@ - @MEM@", banner, 256);
+	bant(argv[0], argv[1], banner, 256);
 	puts(banner);
 	return 0;
 }
