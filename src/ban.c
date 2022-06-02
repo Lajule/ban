@@ -32,7 +32,7 @@
 
 struct mem_s
 {
-  uint64_t available, total;
+	uint64_t available, total;
 };
 
 static const char *mem_units[] = {"B", "K", "M", "G", "T"};
